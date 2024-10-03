@@ -33,3 +33,68 @@ function [Y, freq] = make_spectrum(signal, fs)
     Y = Y(:);
     freq = freq(:);
 end
+
+% Loading the recorded audio signal
+[voice_signal, fs] = audioread('recording1.wav');  % Load your voice recording
+
+record = voice_signal(20001:44000);  % Extract a portion of the signal
+
+% Time vector for the recorded signal
+t_record = (0:length(record)-1) / fs;  % Time vector based on the sample rate
+
+% Use make_spectrum to compute the FFT and frequency vector for the recorded signal
+[Y_voice, freq_voice] = make_spectrum(record, fs);
+
+% Generate a clean sine wave at the dominant frequency
+f_dominant = 341.09;  % The dominant frequency (in Hz)
+t_clean = (0:length(record)-1) / 6000;  % Use the same time length as the recorded signal
+clean_signal = 0.107*sin(2*pi*f_dominant*t_clean);  % Generate the clean sine wave
+
+% Use make_spectrum to compute the FFT and frequency vector for the clean signal
+[Y_clean, freq_clean] = make_spectrum(clean_signal, 6000);
+
+% --- Plot the Magnitude Spectrum in dB ---
+figure;
+hold on;
+plot(freq_voice, 20*log10(abs(Y_voice)), 'r');  % Recorded voice signal in red (dB)
+plot(freq_clean, 20*log10(abs(Y_clean)), 'b');  % Clean signal in blue (dB)
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+title(['Magnitude Spectrum of the Recorded and Clean Signals (', num2str(f_dominant), 'Hz)']);
+xlim([0 3000]);  % Limit the x-axis to show frequencies from 0 to 3000 Hz
+legend('Recorded Signal (dB)', 'Clean Signal (dB)');
+grid on;
+hold off;
+
+% --- Plot the Magnitude Spectrum in dB ---
+figure;
+hold on;
+plot(freq_voice, abs(Y_voice), 'r');  % Recorded voice signal in red (dB)
+plot(freq_clean, abs(Y_clean), 'b');  % Clean signal in blue (dB)
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+title(['Magnitude Spectrum of the Recorded and Clean Signals (', num2str(f_dominant), 'Hz)']);
+xlim([0 3000]);  % Limit the x-axis to show frequencies from 0 to 3000 Hz
+legend('Recorded Signal (dB)', 'Clean Signal (dB)');
+grid on;
+hold off;
+
+% Subplot 1: Time domain plot for the recorded signal (in red)
+subplot(2, 1, 1);  % First subplot (2 rows, 1 column, first plot)
+plot(t_record, record, 'r');  % Recorded voice signal in red (time domain)
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Time Domain of the Recorded Signal');
+grid on;
+xlim([0.3 max(t_record)]);  % Set x-axis limits for time
+ylim([-1 1]);  % Adjust y-axis limits for time domain plot
+
+% Subplot 2: Time domain plot for the clean signal (in blue)
+subplot(2, 1, 2);  % Second subplot (2 rows, 1 column, second plot)
+plot(t_clean, clean_signal, 'b');  % Clean signal in blue (time domain)
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Time Domain of the Clean Signal');
+grid on;
+xlim([0.3 max(t_clean)]);  % Set x-axis limits for time
+ylim([-1 1]);  % Adjust y-axis limits for time domain plot
