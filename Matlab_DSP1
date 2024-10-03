@@ -1,0 +1,35 @@
+function [Y, freq] = make_spectrum(signal, fs)
+
+    % Compute the FFT of the signal
+    Y = fft(signal);
+
+    % Scale the FFT result to get meaningful physical units
+    Y = Y / (length(Y));
+
+    % Frequency resolution (delta_f)
+    delta_f = fs / (length(Y));
+
+    % Frequency vector (only up to the Nyquist frequency, fs/2)
+    freq = 0:delta_f:(fs-delta_f);
+
+    Y = Y(:);
+    freq = freq(:);
+end
+
+function [Y, freq] = make_spectrum(signal, fs)
+
+    % Compute the FFT of the signal
+    Y = fft(signal);
+
+    % Scale the FFT result to get meaningful physical units
+    Y = Y / (length(Y));
+
+    % Frequency resolution (delta_f)
+    delta_f = fs / (length(Y));
+
+    % Frequency vector (only up to the Nyquist frequency, fs/2)
+    freq = 0:delta_f:(fs-delta_f);
+
+    Y = Y(:);
+    freq = freq(:);
+end
